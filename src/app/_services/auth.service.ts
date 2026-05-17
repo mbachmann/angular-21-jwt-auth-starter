@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
-import { API_BASE_URL } from '../../main';
+import { API_BASE_URL } from '../core/api-base-url.token';
 
 
 const httpOptions = {

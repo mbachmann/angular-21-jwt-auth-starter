@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { API_BASE_URL } from './core/api-base-url.token';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -12,6 +13,7 @@ describe('AppComponent', () => {
         provideRouter([]), // or []
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
+        { provide: API_BASE_URL, useValue: 'http://localhost:8080' },
       ],
     }).compileComponents();
   });

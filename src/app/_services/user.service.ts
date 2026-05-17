@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_BASE_URL } from '../../main';
+import { API_BASE_URL } from '../core/api-base-url.token';
 
 
 @Injectable({

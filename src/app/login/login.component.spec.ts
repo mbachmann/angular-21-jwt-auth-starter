@@ -4,6 +4,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { API_BASE_URL } from '../core/api-base-url.token';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -16,6 +17,7 @@ describe('LoginComponent', () => {
         provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
+        { provide: API_BASE_URL, useValue: 'http://localhost:8080' },
       ],
     }).compileComponents();
 
