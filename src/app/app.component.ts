@@ -55,17 +55,11 @@ export class AppComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout().subscribe({
-      next: res => {
-        console.log(res);
-        this.storageService.clean();
-        this.router.navigate(['/', 'home']).then(() => {
-          window.location.reload();
-        });
-      },
-      error: err => {
-        console.log(err);
-      },
-    });
+    // Clear local session immediately so no further 401-triggered logout loops occur
+    this.storageService.clean();
+    this.init();
+    this.router.navigate(['/', 'home']);
+    // Fire-and-forget: notify the backend; errors are silently ignored
+    this.authService.logout().subscribe({ error: () => {} });
   }
 }

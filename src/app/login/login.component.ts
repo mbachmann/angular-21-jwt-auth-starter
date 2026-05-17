@@ -53,9 +53,16 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = true;
         this.roles = this.storageService.getUser().roles;
         this.eventBusService.emit(new EventData('login', this.redirectTo));
+
+        // Navigate automatically after successful login
+        if (this.redirectTo) {
+          this.router.navigate(['/', this.redirectTo]);
+        } else {
+          this.router.navigate(['/home']);
+        }
       },
       error: err => {
-        this.errorMessage = err.error.message;
+        this.errorMessage = err.error?.message ?? 'Login failed';
         this.isLoginFailed = true;
       },
     });

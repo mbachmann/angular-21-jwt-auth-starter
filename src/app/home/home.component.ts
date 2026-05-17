@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -9,6 +9,7 @@ import { UserService } from '../_services/user.service';
 })
 export class HomeComponent implements OnInit {
   private userService = inject(UserService);
+  private cdr = inject(ChangeDetectorRef);
 
   content?: string;
 
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
     this.userService.getPublicContent().subscribe({
       next: data => {
         this.content = data;
+        this.cdr.detectChanges();
       },
       error: err => {
         if (err.error) {
@@ -28,6 +30,7 @@ export class HomeComponent implements OnInit {
         } else {
           this.content = `Error with status: ${err.status}` + ' (Backend running?)';
         }
+        this.cdr.detectChanges();
       },
     });
   }
