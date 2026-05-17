@@ -3,11 +3,11 @@ networks:
     external: true
 
 services:
-  angular-20-jwt-auth:
-    image: uportal/angular-20-jwt-auth:latest
+  angular-21-jwt-auth:
+    image: uportal/angular-21-jwt-auth:latest
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.todo-angular.rule=Host(`angular-20-jwt-auth.united-portal.com`)'
+      - 'traefik.http.routers.todo-angular.rule=Host(`angular-21-jwt-auth.united-portal.com`)'
       - 'traefik.http.routers.todo-angular.tls=true'
       - 'traefik.http.routers.todo-angular.tls.certresolver=lets-encrypt'
       - 'traefik.http.routers.todo-angular.entrypoints=websecure'
@@ -19,4 +19,4 @@ services:
       - proxy
 
     environment:
-      API_BASE_PATH: https://angular-20-jwt-auth.united-portal.com
+      API_BASE_PATH: https://angular-21-jwt-auth.united-portal.com

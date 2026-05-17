@@ -34,7 +34,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY start.sh /usr/share/nginx/start.sh
 
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
-COPY --from=builder /ng-app/dist/angular-20-jwt-auth/browser /usr/share/nginx/html
+COPY --from=builder /ng-app/dist/angular-21-jwt-auth/browser /usr/share/nginx/html
 
 # Fix permissions for runtime
 RUN chmod 777 /var/log/nginx /usr/share/nginx/html

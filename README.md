@@ -1,9 +1,9 @@
-# Angular 20 JWT Authentication & Authorization example with Rest API (standalone)
+# Angular 21 JWT Authentication & Authorization example with Rest API (standalone)
 
 - Backend: https://github.com/mbachmann/spring-boot-3-starter-security.git
-- Frontend: https://github.com/mbachmann/angular-20-jwt-auth-starter-standalone.git
+- Frontend: https://github.com/mbachmann/angular-21-jwt-auth-starter.git
 
-Build Angular 20 JWT Authentication & Authorization example with Rest Api, HttpOnly Cookie and JWT (including HttpInterceptor, Router & Form Validation).
+Build Angular 21 JWT Authentication & Authorization example with Rest Api, HttpOnly Cookie and JWT (including HttpInterceptor, Router & Form Validation).
 - JWT Authentication Flow for User Registration (Signup) & User Login
 - Project Structure with HttpInterceptor, Router
 - Way to implement HttpInterceptor
@@ -50,7 +50,7 @@ A preconfigured shell script includes the build command:
 ```
 $  docker login
 $  docker login --username uportal --password
-$  docker push uportal/angular-20-jwt-auth
+$  docker push uportal/angular-21-jwt-auth
 ```
 
 <br/>
@@ -72,7 +72,7 @@ Replace **uportal** with your **dockerhub id**.
 <br/>
 
 ```
-$  docker pull uportal/angular-20-jwt-auth
+$  docker pull uportal/angular-21-jwt-auth
 ```
 
 <br/>

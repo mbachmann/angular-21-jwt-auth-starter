@@ -1,4 +1,4 @@
 #!/bin/sh
 
 
-docker buildx build --platform linux/arm64 -t uportal/angular-20-jwt-auth -f Dockerfile .
+docker buildx build --platform linux/arm64 -t uportal/angular-21-jwt-auth -f Dockerfile .

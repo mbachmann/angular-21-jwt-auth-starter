@@ -7,6 +7,7 @@ import { NgClass } from '@angular/common';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
+  standalone: true,
   imports: [FormsModule, NgClass],
 })
 export class RegisterComponent {

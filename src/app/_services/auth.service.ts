@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
 import { API_BASE_URL } from '../core/api-base-url.token';
 
-
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };

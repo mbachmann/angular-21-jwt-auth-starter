@@ -24,9 +24,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should have as title "angular-20-jwt-auth"', () => {
+  it('should have as title "angular-21-jwt-auth"', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-20-jwt-auth');
+    expect(app.title).toEqual('angular-21-jwt-auth');
   });
 });

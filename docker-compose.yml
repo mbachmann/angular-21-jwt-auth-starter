@@ -1,6 +1,6 @@
 services:
-  angular-20-jwt-auth:
-    image: uportal/angular-20-jwt-auth:latest
+  angular-21-jwt-auth:
+    image: uportal/angular-21-jwt-auth:latest
 
     restart: unless-stopped
     ports:

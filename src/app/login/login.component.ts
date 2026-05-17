@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  standalone: true,
   imports: [FormsModule, NgClass],
 })
 export class LoginComponent implements OnInit {
@@ -58,10 +59,6 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = true;
       },
     });
-  }
-
-  reloadPage(): void {
-    window.location.reload();
   }
 
   navigateTo() {

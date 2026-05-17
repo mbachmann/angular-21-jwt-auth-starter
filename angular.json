@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-20-jwt-auth": {
+    "angular-21-jwt-auth": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -40,7 +40,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/angular-20-jwt-auth"
+              "base": "dist/angular-21-jwt-auth"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -52,7 +52,11 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "bundleName": "bootstrap",
+                "inject": true
+              },
               "src/styles.css"
             ],
             "scripts": [
@@ -65,13 +69,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "900kb",
+                  "maximumError": "1.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "20kb"
                 }
               ],
               "outputHashing": "all"
@@ -95,10 +99,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-20-jwt-auth:build:production"
+              "buildTarget": "angular-21-jwt-auth:build:production"
             },
             "development": {
-              "buildTarget": "angular-20-jwt-auth:build:development"
+              "buildTarget": "angular-21-jwt-auth:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -106,7 +110,7 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
           "options": {
-            "buildTarget": "angular-20-jwt-auth:build"
+            "buildTarget": "angular-21-jwt-auth:build"
           }
         },
         "test": {

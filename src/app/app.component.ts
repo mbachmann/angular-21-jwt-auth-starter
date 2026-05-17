@@ -10,6 +10,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  standalone: true,
   imports: [RouterLinkActive, RouterLink, RouterOutlet],
 })
 export class AppComponent implements OnInit {
@@ -23,7 +24,7 @@ export class AppComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username?: string;
-  title = 'angular-20-jwt-auth';
+  title = 'angular-21-jwt-auth';
   eventBusSub?: Subscription;
 
   ngOnInit(): void {
@@ -58,7 +59,7 @@ export class AppComponent implements OnInit {
       next: res => {
         console.log(res);
         this.storageService.clean();
-        this.router.navigate(['/', 'home']).then(nav => {
+        this.router.navigate(['/', 'home']).then(() => {
           window.location.reload();
         });
       },

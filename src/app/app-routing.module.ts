@@ -1,28 +1,28 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
-import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { authGuard } from './guards/auth-guard';
-import { NoAccessComponent } from './no-access/no-access.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'user', component: BoardUserComponent },
-  { path: 'mod', component: BoardModeratorComponent },
-  { path: 'admin', component: BoardAdminComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: 'home', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) },
+  { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent) },
+  { path: 'profile', loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent) },
+  { path: 'user', loadComponent: () => import('./board-user/board-user.component').then(m => m.BoardUserComponent) },
+  {
+    path: 'mod',
+    loadComponent: () => import('./board-moderator/board-moderator.component').then(m => m.BoardModeratorComponent),
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./board-admin/board-admin.component').then(m => m.BoardAdminComponent),
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '404', component: HomeComponent },
-  { path: '401', component: NoAccessComponent },
-  { path: '**', component: HomeComponent },
+  { path: '404', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) },
+  { path: '401', loadComponent: () => import('./no-access/no-access.component').then(m => m.NoAccessComponent) },
+  { path: '**', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) },
 ];
 
 @NgModule({
