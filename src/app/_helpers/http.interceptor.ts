@@ -13,11 +13,13 @@ import { catchError } from 'rxjs/operators';
 import { StorageService } from '../_services/storage.service';
 import { EventBusService } from '../_shared/event-bus.service';
 import { EventData } from '../_shared/event.class';
+import { LoggerService } from '../core/_shared/logger.service';
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
   private storageService = inject(StorageService);
   private eventBusService = inject(EventBusService);
+  private logger = inject(LoggerService);
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     req = req.clone({
@@ -31,22 +33,22 @@ export class HttpRequestInterceptor implements HttpInterceptor {
             return this.handle401Error();
           }
         } else if (error?.error?.message) {
-          console.log(error?.error?.message);
+          this.logger.error(error?.error?.message);
         } else {
           switch (error.status) {
             case 0:
-              console.log(`No connection to the backend.`);
+              this.logger.warn(`No connection to the backend.`);
               break;
             case 401:
-              console.log(
+              this.logger.warn(
                 `The current session is not valid anymore. Please close the browser window and start the App again.`
               );
               break;
             case 404:
-              console.log(`The object ${error.error?.message} has not been found or is inactive.`);
+              this.logger.warn(`The object ${error.error?.message} has not been found or is inactive.`);
               break;
             default:
-              console.log(error.message, error);
+              this.logger.error(error.message, error);
           }
         }
 

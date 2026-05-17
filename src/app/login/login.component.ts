@@ -6,6 +6,8 @@ import { EventBusService } from '../_shared/event-bus.service';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { getHttpErrorMessage } from '../core/_shared/http-error-message.util';
 
 @Component({
   selector: 'app-login',
@@ -32,44 +34,46 @@ export class LoginComponent implements OnInit {
   redirectTo = signal<string | null>(null);
 
   ngOnInit(): void {
+    void this.initState();
+  }
+
+  private async initState(): Promise<void> {
     if (this.storageService.isLoggedIn()) {
       this.isLoggedIn.set(true);
       this.roles.set(this.storageService.getUser().roles);
     } else {
-      this.activatedRoute.queryParamMap.subscribe(params => {
-        this.redirectTo.set(params.get('redirect'));
-      });
+      const params = await firstValueFrom(this.activatedRoute.queryParamMap);
+      this.redirectTo.set(params.get('redirect'));
     }
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const { username, password } = this.form;
 
-    this.authService.login(username, password).subscribe({
-      next: data => {
-        this.storageService.saveUser(data);
+    try {
+      const data = await firstValueFrom(this.authService.login(username, password));
+      this.storageService.saveUser(data);
 
-        this.isLoginFailed.set(false);
-        this.isLoggedIn.set(true);
-        this.roles.set(this.storageService.getUser().roles);
-        this.eventBusService.emit(new EventData('login', this.redirectTo()));
+      this.isLoginFailed.set(false);
+      this.isLoggedIn.set(true);
+      this.roles.set(this.storageService.getUser().roles);
+      this.eventBusService.emit(new EventData('login', this.redirectTo()));
 
-        // Navigate automatically after successful login
-        const redirect = this.redirectTo();
-        if (redirect) {
-          this.router.navigate(['/', redirect]);
-        } else {
-          this.router.navigate(['/home']);
-        }
-      },
-      error: err => {
-        this.errorMessage.set(err.error?.message ?? 'Login failed');
-        this.isLoginFailed.set(true);
-      },
-    });
+      // Navigate automatically after successful login
+      const redirect = this.redirectTo();
+      if (redirect) {
+        await this.router.navigate(['/', redirect]);
+      } else {
+        await this.router.navigate(['/home']);
+      }
+    } catch (err: any) {
+      const message = typeof err?.error?.message === 'string' ? err.error.message : getHttpErrorMessage(err);
+      this.errorMessage.set(message || 'Login failed');
+      this.isLoginFailed.set(true);
+    }
   }
 
-  navigateTo() {
-    this.router.navigate(['/', this.redirectTo()]);
+  async navigateTo(): Promise<void> {
+    await this.router.navigate(['/', this.redirectTo()]);
   }
 }

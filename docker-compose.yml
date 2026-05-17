@@ -4,6 +4,6 @@ services:
 
     restart: unless-stopped
     ports:
-      - '4000:80'
+      - '4001:80'
     environment:
       API_BASE_PATH: http://localhost:8080

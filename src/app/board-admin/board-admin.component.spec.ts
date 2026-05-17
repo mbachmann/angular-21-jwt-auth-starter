@@ -1,30 +1,48 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { vi } from 'vitest';
 
 import { BoardAdminComponent } from './board-admin.component';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { API_BASE_URL } from '../core/api-base-url.token';
+import { UserService } from '../_services/user.service';
 
 describe('BoardAdminComponent', () => {
   let component: BoardAdminComponent;
   let fixture: ComponentFixture<BoardAdminComponent>;
+  let getAdminBoard: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
+    getAdminBoard = vi.fn().mockReturnValue(of('Admin Board Content.'));
+
     await TestBed.configureTestingModule({
       imports: [BoardAdminComponent],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-        { provide: API_BASE_URL, useValue: 'http://localhost:8080' },
+        {
+          provide: UserService,
+          useValue: {
+            getAdminBoard,
+          },
+        },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BoardAdminComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component).toBeTruthy();
+  });
+
+  it('should display admin board content from the service', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const content = fixture.nativeElement.querySelector('p')?.textContent?.trim();
+
+    expect(getAdminBoard).toHaveBeenCalledTimes(1);
+    expect(content).toBe('Admin Board Content.');
   });
 });

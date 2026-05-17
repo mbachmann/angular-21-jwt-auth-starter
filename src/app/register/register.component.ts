@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../_services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
+import { getHttpErrorMessage } from '../core/_shared/http-error-message.util';
 
 @Component({
   selector: 'app-register',
@@ -22,19 +24,17 @@ export class RegisterComponent {
   isSignUpFailed = signal(false);
   errorMessage = signal('');
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const { username, email, password } = this.form;
 
-    this.authService.register(username, email, password).subscribe({
-      next: data => {
-        console.log(data);
-        this.isSuccessful.set(true);
-        this.isSignUpFailed.set(false);
-      },
-      error: err => {
-        this.errorMessage.set(err.error.message);
-        this.isSignUpFailed.set(true);
-      },
-    });
+    try {
+      await firstValueFrom(this.authService.register(username, email, password));
+      this.isSuccessful.set(true);
+      this.isSignUpFailed.set(false);
+    } catch (err: any) {
+      const message = typeof err?.error?.message === 'string' ? err.error.message : getHttpErrorMessage(err);
+      this.errorMessage.set(message || 'Signup failed');
+      this.isSignUpFailed.set(true);
+    }
   }
 }

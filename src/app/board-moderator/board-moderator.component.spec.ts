@@ -1,30 +1,48 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { vi } from 'vitest';
 
 import { BoardModeratorComponent } from './board-moderator.component';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { API_BASE_URL } from '../core/api-base-url.token';
+import { UserService } from '../_services/user.service';
 
 describe('BoardModeratorComponent', () => {
   let component: BoardModeratorComponent;
   let fixture: ComponentFixture<BoardModeratorComponent>;
+  let getModeratorBoard: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
+    getModeratorBoard = vi.fn().mockReturnValue(of('Moderator Board Content.'));
+
     await TestBed.configureTestingModule({
       imports: [BoardModeratorComponent],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-        { provide: API_BASE_URL, useValue: 'http://localhost:8080' },
+        {
+          provide: UserService,
+          useValue: {
+            getModeratorBoard,
+          },
+        },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BoardModeratorComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
     expect(component).toBeTruthy();
+  });
+
+  it('should display moderator board content from the service', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const content = fixture.nativeElement.querySelector('p')?.textContent?.trim();
+
+    expect(getModeratorBoard).toHaveBeenCalledTimes(1);
+    expect(content).toBe('Moderator Board Content.');
   });
 });

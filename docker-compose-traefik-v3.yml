@@ -7,16 +7,16 @@ services:
     image: uportal/angular-21-jwt-auth:latest
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.todo-angular.rule=Host(`angular-21-jwt-auth.united-portal.com`)'
-      - 'traefik.http.routers.todo-angular.tls=true'
-      - 'traefik.http.routers.todo-angular.tls.certresolver=lets-encrypt'
-      - 'traefik.http.routers.todo-angular.entrypoints=websecure'
-      - 'traefik.http.services.todo-angular.loadbalancer.server.port=80'
+      - 'traefik.http.routers.demo-initial.rule=Host(`angular-21-jwt-auth.united-portal.com`)'
+      - 'traefik.http.routers.tdemo-initial.tls=true'
+      - 'traefik.http.routers.demo-initial.tls.certresolver=lets-encrypt'
+      - 'traefik.http.routers.demo-initial.entrypoints=websecure'
+      - 'traefik.http.services.demo-initial.loadbalancer.server.port=80'
     restart: unless-stopped
     ports:
-      - 4000:80
+      - 4001:80
     networks:
       - proxy
 
     environment:
-      API_BASE_PATH: https://angular-21-jwt-auth.united-portal.com
+      API_BASE_PATH: https://demo-initial-h2.united-portal.com

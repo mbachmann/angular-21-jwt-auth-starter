@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, firstValueFrom } from 'rxjs';
 import { StorageService } from './_services/storage.service';
 import { AuthService } from './_services/auth.service';
 import { EventBusService } from './_shared/event-bus.service';
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
     this.init();
 
     this.eventBusSub = this.eventBusService.on('logout', () => {
-      this.logout();
+      void this.logout();
     });
 
     this.eventBusService.on('login', (value: string) => {
@@ -58,12 +58,16 @@ export class AppComponent implements OnInit {
     }
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
     // Clear local session immediately so no further 401-triggered logout loops occur
     this.storageService.clean();
     this.init();
-    this.router.navigate(['/', 'home']);
+    await this.router.navigate(['/', 'home']);
     // Fire-and-forget: notify the backend; errors are silently ignored
-    this.authService.logout().subscribe({ error: () => {} });
+    try {
+      await firstValueFrom(this.authService.logout());
+    } catch {
+      // Backend logout errors are intentionally ignored because local logout already succeeded.
+    }
   }
 }

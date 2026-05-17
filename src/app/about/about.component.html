@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="p-4 mb-4 bg-light rounded-3">
+    <h2>About</h2>
+    <p class="mb-0">Build metadata generated at compile time.</p>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">Capabilities</div>
+    <div class="card-body">
+      <table class="table table-sm mb-0">
+        <tbody>
+          <tr>
+            <th>standalone</th>
+            <td>{{ info.features.standalone ? 'yes' : 'no' }}</td>
+          </tr>
+          <tr>
+            <th>zoneless</th>
+            <td>{{ info.features.zoneless ? 'yes' : 'no' }}</td>
+          </tr>
+          <tr>
+            <th>flowSyntax</th>
+            <td>{{ info.features.flowSyntax ? 'yes' : 'no' }}</td>
+          </tr>
+          <tr>
+            <th>signals</th>
+            <td>{{ info.features.signals ? 'yes' : 'no' }}</td>
+          </tr>
+          <tr>
+            <th>forms: template forms</th>
+            <td>{{ info.features.formsTemplate ? 'yes' : 'no' }}</td>
+          </tr>
+          <tr>
+            <th>forms: reactive forms</th>
+            <td>{{ info.features.formsReactive ? 'yes' : 'no' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">App</div>
+    <div class="card-body">
+      <table class="table table-sm mb-0">
+        <tbody>
+          <tr>
+            <th>name</th>
+            <td>{{ info.app.name }}</td>
+          </tr>
+          <tr>
+            <th>version</th>
+            <td>{{ info.app.version }}</td>
+          </tr>
+          <tr>
+            <th>build time</th>
+            <td>{{ info.buildTime | date: 'yyyy-MM-dd HH:mm:ss Z' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Selected dependencies</div>
+    <div class="card-body">
+      <table class="table table-sm mb-0">
+        <tbody>
+          @for (entry of info.dependencies | keyvalue; track entry.key) {
+            <tr>
+              <th>{{ entry.key }}</th>
+              <td>{{ entry.value }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

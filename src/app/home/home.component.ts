@@ -1,5 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { UserService } from '../_services/user.service';
+import { getHttpErrorMessage } from '../core/_shared/http-error-message.util';
 
 @Component({
   selector: 'app-home',
@@ -13,22 +15,15 @@ export class HomeComponent implements OnInit {
   content = signal<string | undefined>(undefined);
 
   ngOnInit(): void {
-    this.userService.getPublicContent().subscribe({
-      next: data => {
-        this.content.set(data);
-      },
-      error: err => {
-        if (err.error) {
-          try {
-            const res = JSON.parse(err.error);
-            this.content.set(res.message + ' (Backend running?)');
-          } catch {
-            this.content.set(`Error with status: ${err.status} - ${err.statusText}` + ' (Backend running?)');
-          }
-        } else {
-          this.content.set(`Error with status: ${err.status}` + ' (Backend running?)');
-        }
-      },
-    });
+    void this.loadContent();
+  }
+
+  private async loadContent(): Promise<void> {
+    try {
+      const data = await firstValueFrom(this.userService.getPublicContent());
+      this.content.set(data);
+    } catch (err: any) {
+      this.content.set(`${getHttpErrorMessage(err)} (Backend running?)`);
+    }
   }
 }

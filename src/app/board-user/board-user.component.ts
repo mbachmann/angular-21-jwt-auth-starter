@@ -1,5 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { UserService } from '../_services/user.service';
+import { getHttpErrorMessage } from '../core/_shared/http-error-message.util';
 
 @Component({
   selector: 'app-board-user',
@@ -13,22 +15,15 @@ export class BoardUserComponent implements OnInit {
   content = signal<string | undefined>(undefined);
 
   ngOnInit(): void {
-    this.userService.getUserBoard().subscribe({
-      next: data => {
-        this.content.set(data);
-      },
-      error: err => {
-        if (err.error) {
-          try {
-            const res = JSON.parse(err.error);
-            this.content.set(res.message);
-          } catch {
-            this.content.set(`Error with status: ${err.status} - ${err.statusText}`);
-          }
-        } else {
-          this.content.set(`Error with status: ${err.status}`);
-        }
-      },
-    });
+    void this.loadContent();
+  }
+
+  private async loadContent(): Promise<void> {
+    try {
+      const data = await firstValueFrom(this.userService.getUserBoard());
+      this.content.set(data);
+    } catch (err: any) {
+      this.content.set(getHttpErrorMessage(err));
+    }
   }
 }

@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, Url
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../_services/auth.service';
+import { LoggerService } from '../core/_shared/logger.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,7 @@ import { AuthService } from '../_services/auth.service';
 class PermissionsService {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private logger = inject(LoggerService);
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -24,7 +26,7 @@ class PermissionsService {
     if (this.authService.hasAnyRole(allowedRoles)) {
       return true;
     } else {
-      console.log('no access rights, need role ' + allowedRoles);
+      this.logger.warn('No access rights, required roles:', allowedRoles);
       if (this.authService.isLoggedIn()) {
         this.router.navigate(['/', '401'], { queryParams: { redirect: redirectTo } });
       } else {
