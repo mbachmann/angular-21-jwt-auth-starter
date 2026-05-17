@@ -23,10 +23,10 @@ export class HomeComponent implements OnInit {
             const res = JSON.parse(err.error);
             this.content = res.message + " (Backend running?)";
           } catch {
-            this.content = `Error with status: ${err.status} - ${err.statusText}`;
+            this.content = `Error with status: ${err.status} - ${err.statusText}`  + " (Backend running?)";
           }
         } else {
-          this.content = `Error with status: ${err.status}`;
+          this.content = `Error with status: ${err.status}` + " (Backend running?)";
         }
       },
     });
