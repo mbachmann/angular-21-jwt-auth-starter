@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
         if (err.error) {
           try {
             const res = JSON.parse(err.error);
-            this.content = res.message;
+            this.content = res.message + " (Backend running?)";
           } catch {
             this.content = `Error with status: ${err.status} - ${err.statusText}`;
           }
