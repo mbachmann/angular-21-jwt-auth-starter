@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -9,28 +9,25 @@ import { UserService } from '../_services/user.service';
 })
 export class BoardModeratorComponent implements OnInit {
   private userService = inject(UserService);
-  private cdr = inject(ChangeDetectorRef);
 
-  content?: string;
+  content = signal<string | undefined>(undefined);
 
   ngOnInit(): void {
     this.userService.getModeratorBoard().subscribe({
       next: data => {
-        this.content = data;
-        this.cdr.detectChanges();
+        this.content.set(data);
       },
       error: err => {
         if (err.error) {
           try {
             const res = JSON.parse(err.error);
-            this.content = res.message;
+            this.content.set(res.message);
           } catch {
-            this.content = `Error with status: ${err.status} - ${err.statusText}`;
+            this.content.set(`Error with status: ${err.status} - ${err.statusText}`);
           }
         } else {
-          this.content = `Error with status: ${err.status}`;
+          this.content.set(`Error with status: ${err.status}`);
         }
-        this.cdr.detectChanges();
       },
     });
   }

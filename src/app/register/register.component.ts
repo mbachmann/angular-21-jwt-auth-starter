@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
@@ -18,9 +18,9 @@ export class RegisterComponent {
     email: null,
     password: null,
   };
-  isSuccessful = false;
-  isSignUpFailed = false;
-  errorMessage = '';
+  isSuccessful = signal(false);
+  isSignUpFailed = signal(false);
+  errorMessage = signal('');
 
   onSubmit(): void {
     const { username, email, password } = this.form;
@@ -28,12 +28,12 @@ export class RegisterComponent {
     this.authService.register(username, email, password).subscribe({
       next: data => {
         console.log(data);
-        this.isSuccessful = true;
-        this.isSignUpFailed = false;
+        this.isSuccessful.set(true);
+        this.isSignUpFailed.set(false);
       },
       error: err => {
-        this.errorMessage = err.error.message;
-        this.isSignUpFailed = true;
+        this.errorMessage.set(err.error.message);
+        this.isSignUpFailed.set(true);
       },
     });
   }

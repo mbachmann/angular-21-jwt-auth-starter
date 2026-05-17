@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { StorageService } from './_services/storage.service';
 import { AuthService } from './_services/auth.service';
@@ -19,11 +19,11 @@ export class AppComponent implements OnInit {
   private eventBusService = inject(EventBusService);
   private router = inject(Router);
 
-  private roles: string[] = [];
-  isLoggedIn = false;
-  showAdminBoard = false;
-  showModeratorBoard = false;
-  username?: string;
+  private roles = signal<string[]>([]);
+  isLoggedIn = signal(false);
+  showAdminBoard = signal(false);
+  showModeratorBoard = signal(false);
+  username = signal<string | undefined>(undefined);
   title = 'angular-21-jwt-auth';
   eventBusSub?: Subscription;
 
@@ -41,16 +41,20 @@ export class AppComponent implements OnInit {
   }
 
   private init() {
-    this.isLoggedIn = this.storageService.isLoggedIn();
+    const loggedIn = this.storageService.isLoggedIn();
+    this.isLoggedIn.set(loggedIn);
 
-    if (this.isLoggedIn) {
+    if (loggedIn) {
       const user = this.storageService.getUser();
-      this.roles = user.roles;
-
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
-      this.username = user.username;
+      this.roles.set(user.roles);
+      this.showAdminBoard.set(this.roles().includes('ROLE_ADMIN'));
+      this.showModeratorBoard.set(this.roles().includes('ROLE_MODERATOR'));
+      this.username.set(user.username);
+    } else {
+      this.roles.set([]);
+      this.showAdminBoard.set(false);
+      this.showModeratorBoard.set(false);
+      this.username.set(undefined);
     }
   }
 

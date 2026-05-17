@@ -5,7 +5,7 @@
       src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
       class="profile-img-card"
       alt="profile image" />
-    @if (!isSuccessful) {
+    @if (!isSuccessful()) {
       <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
@@ -83,13 +83,13 @@
         <div class="d-grid mb-3">
           <button type="submit" class="btn btn-primary">Sign Up</button>
         </div>
-        @if (f.submitted && isSignUpFailed) {
-          <div class="alert alert-warning">Signup failed!<br />{{ errorMessage }}</div>
+        @if (f.submitted && isSignUpFailed()) {
+          <div class="alert alert-warning">Signup failed!<br />{{ errorMessage() }}</div>
         }
       </form>
     }
 
-    @if (isSuccessful) {
+    @if (isSuccessful()) {
       <div class="alert alert-success">Your registration is successful!</div>
     }
   </div>

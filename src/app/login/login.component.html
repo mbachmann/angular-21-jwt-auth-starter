@@ -2,7 +2,7 @@
   <div class="card card-container">
     <img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="profile-img-card" alt="avatar" />
 
-    @if (!isLoggedIn) {
+    @if (!isLoggedIn()) {
       <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
@@ -45,20 +45,20 @@
         <div class="d-grid mb-3">
           <button type="submit" class="btn btn-primary">Login</button>
         </div>
-        @if (f.submitted && isLoginFailed) {
-          <div class="alert alert-danger" role="alert">Login failed: {{ errorMessage }}</div>
+        @if (f.submitted && isLoginFailed()) {
+          <div class="alert alert-danger" role="alert">Login failed: {{ errorMessage() }}</div>
         }
       </form>
     }
 
-    @if (isLoggedIn) {
-      <div class="alert alert-success">Logged in as {{ roles }}.</div>
+    @if (isLoggedIn()) {
+      <div class="alert alert-success">Logged in as {{ roles() }}.</div>
     }
 
-    @if (isLoggedIn && redirectTo) {
+    @if (isLoggedIn() && redirectTo()) {
       <div class="d-grid">
         <button class="btn btn-primary" (click)="navigateTo()">
-          {{ 'Navigate to ' + redirectTo + ' page' }}
+          {{ 'Navigate to ' + redirectTo() + ' page' }}
         </button>
       </div>
     }

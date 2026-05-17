@@ -1,7 +1,7 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { provideZoneChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { appRoutes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { httpInterceptorProviders } from './app/_helpers/http.interceptor';
@@ -10,7 +10,7 @@ import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZonelessChangeDetection(),
     provideRouter(appRoutes),
     httpInterceptorProviders,
     provideHttpClient(withInterceptorsFromDi()),

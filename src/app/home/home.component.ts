@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -9,28 +9,25 @@ import { UserService } from '../_services/user.service';
 })
 export class HomeComponent implements OnInit {
   private userService = inject(UserService);
-  private cdr = inject(ChangeDetectorRef);
 
-  content?: string;
+  content = signal<string | undefined>(undefined);
 
   ngOnInit(): void {
     this.userService.getPublicContent().subscribe({
       next: data => {
-        this.content = data;
-        this.cdr.detectChanges();
+        this.content.set(data);
       },
       error: err => {
         if (err.error) {
           try {
             const res = JSON.parse(err.error);
-            this.content = res.message + ' (Backend running?)';
+            this.content.set(res.message + ' (Backend running?)');
           } catch {
-            this.content = `Error with status: ${err.status} - ${err.statusText}` + ' (Backend running?)';
+            this.content.set(`Error with status: ${err.status} - ${err.statusText}` + ' (Backend running?)');
           }
         } else {
-          this.content = `Error with status: ${err.status}` + ' (Backend running?)';
+          this.content.set(`Error with status: ${err.status}` + ' (Backend running?)');
         }
-        this.cdr.detectChanges();
       },
     });
   }
